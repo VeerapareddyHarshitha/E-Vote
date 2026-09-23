@@ -1,0 +1,1006 @@
+/* ==========================================================================
+   SRI CHANDRASEKHARENDRA SARASWATHI VISWA MAHAVIDYALAYA (SCSVMV)
+   COLLEGE DIGITAL VOTING SYSTEM - OFFICIAL BRANDING STYLESHEET
+   ========================================================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+
+:root {
+  /* Institutional Color Palette */
+  --primary-900: #0F294A; /* SCSVMV Deep Navy Blue */
+  --primary-800: #1E3A8A; /* Official Royal Blue */
+  --primary-700: #1D4ED8;
+  --primary-600: #2563EB;
+  --primary-500: #3B82F6;
+  --primary-100: #DBEAFE;
+  --primary-50:  #F0F7FF;
+
+  /* Logo Gold/Orange Accent (Used sparingly) */
+  --accent-gold: #D97706;
+  --accent-gold-dark: #B45309;
+  --accent-gold-light: #FEF3C7;
+  
+  --surface-body: #F8FAFC;
+  --surface-card: #FFFFFF;
+  --border-color: #E2E8F0;
+  --border-focus: #2563EB;
+
+  /* Typography Colors */
+  --text-main: #1E293B;
+  --text-muted: #64748B;
+  --text-light: #94A3B8;
+
+  /* State Colors */
+  --color-success: #059669;
+  --color-danger: #DC2626;
+  --color-warning: #D97706;
+
+  /* Clean Shadows & Radius */
+  --shadow-sm: 0 1px 3px rgba(15, 23, 42, 0.05);
+  --shadow-md: 0 4px 12px rgba(15, 23, 42, 0.07);
+  --shadow-lg: 0 10px 25px -3px rgba(15, 23, 42, 0.1);
+
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 14px;
+  --radius-full: 9999px;
+
+  --transition-fast: all 0.15s ease-in-out;
+  --transition-normal: all 0.25s ease-in-out;
+}
+
+/* Reset & Base Styles */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  height: 100%;
+  font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+  background-color: var(--surface-body);
+  color: var(--text-main);
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Clean Background */
+.bg-ambient {
+  min-height: 100vh;
+  background: var(--surface-body);
+  display: flex;
+  flex-direction: column;
+}
+
+/* App Layout Container */
+.app-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+/* ==========================================================================
+   HEADER / NAVIGATION BAR
+   ========================================================================== */
+
+.university-navbar {
+  background: #FFFFFF;
+  border-bottom: 2px solid var(--primary-800);
+  box-shadow: var(--shadow-sm);
+  padding: 0.85rem 2rem;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.navbar-content {
+  max-width: 1280px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.brand-identity {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  text-decoration: none;
+}
+
+.brand-logo-img {
+  width: 52px;
+  height: 52px;
+  object-fit: contain;
+  flex-shrink: 0;
+}
+
+.brand-text-container {
+  display: flex;
+  flex-direction: column;
+}
+
+.brand-institution {
+  font-size: 0.825rem;
+  font-weight: 700;
+  color: var(--primary-900);
+  letter-spacing: -0.01em;
+  text-transform: uppercase;
+}
+
+.brand-title {
+  font-size: 1.1rem;
+  font-weight: 800;
+  color: var(--primary-800);
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+}
+
+.brand-badge {
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--accent-gold-dark);
+}
+
+/* ==========================================================================
+   LOGIN / VERIFICATION CARD
+   ========================================================================== */
+
+.login-view-section {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2.5rem 1.5rem;
+}
+
+.login-card {
+  width: 100%;
+  max-width: 480px;
+  background: #FFFFFF;
+  border: 1px solid var(--border-color);
+  border-top: 4px solid var(--primary-800);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-lg);
+  padding: 2.25rem 2.5rem;
+}
+
+.login-header {
+  text-align: center;
+  margin-bottom: 1.75rem;
+}
+
+.login-college-logo {
+  width: 80px;
+  height: 80px;
+  object-fit: contain;
+  margin-bottom: 0.85rem;
+}
+
+.institution-name {
+  font-size: 0.875rem;
+  font-weight: 700;
+  color: var(--primary-900);
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  line-height: 1.3;
+  margin-bottom: 0.35rem;
+}
+
+.login-title {
+  font-size: 1.35rem;
+  font-weight: 800;
+  color: var(--primary-800);
+  letter-spacing: -0.02em;
+  margin-bottom: 0.25rem;
+}
+
+.login-subtitle {
+  font-size: 0.9rem;
+  color: var(--accent-gold-dark);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+/* Form Controls */
+.login-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+}
+
+.form-label {
+  font-size: 0.875rem;
+  font-weight: 700;
+  color: var(--text-main);
+}
+
+.label-required {
+  color: var(--color-danger);
+}
+
+.input-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.input-icon-prefix {
+  position: absolute;
+  left: 1rem;
+  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  pointer-events: none;
+}
+
+.form-control {
+  width: 100%;
+  padding: 0.85rem 1rem 0.85rem 2.75rem;
+  font-family: inherit;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--text-main);
+  background-color: #FFFFFF;
+  border: 1.5px solid var(--border-color);
+  border-radius: var(--radius-md);
+  outline: none;
+  transition: var(--transition-fast);
+}
+
+.form-control:focus {
+  border-color: var(--border-focus);
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+}
+
+.form-control.is-invalid {
+  border-color: var(--color-danger) !important;
+  background-color: #FFF5F5 !important;
+}
+
+.format-hint {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+
+.derived-email-box {
+  background-color: var(--primary-50);
+  border: 1px solid var(--primary-100);
+  border-radius: var(--radius-sm);
+  padding: 0.6rem 0.85rem;
+  font-size: 0.825rem;
+  color: var(--primary-900);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 0.25rem;
+}
+
+.field-error-message {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--color-danger);
+  min-height: 18px;
+}
+
+/* Primary Button */
+.btn-primary {
+  width: 100%;
+  padding: 0.875rem 1.5rem;
+  font-family: inherit;
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #FFFFFF;
+  background-color: var(--primary-800);
+  border: none;
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  transition: var(--transition-fast);
+}
+
+.btn-primary:hover:not(:disabled) {
+  background-color: var(--primary-900);
+}
+
+.btn-primary:disabled {
+  background-color: #94A3B8;
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+.spinner-loader {
+  width: 18px;
+  height: 18px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-top-color: #FFFFFF;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+/* Demo Credentials Card */
+.demo-accounts-card {
+  margin-top: 1.75rem;
+  padding: 1rem 1.15rem;
+  background: #F8FAFC;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+}
+
+.demo-title {
+  font-size: 0.78rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--primary-900);
+  margin-bottom: 0.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.demo-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.demo-item {
+  font-size: 0.8rem;
+  background: #FFFFFF;
+  padding: 0.5rem 0.75rem;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-color);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+  transition: var(--transition-fast);
+}
+
+.demo-item:hover {
+  border-color: var(--primary-600);
+  background: var(--primary-50);
+}
+
+.demo-tag {
+  font-size: 0.7rem;
+  font-weight: 700;
+  padding: 0.15rem 0.45rem;
+  border-radius: var(--radius-full);
+}
+
+.tag-not-voted { background: #DBEAFE; color: #1E40AF; }
+.tag-voted { background: #D1FAE5; color: #065F46; }
+.tag-ineligible { background: #FEF3C7; color: #92400E; }
+
+/* Toast Notifications */
+.toast-container {
+  position: fixed;
+  top: 1.5rem;
+  right: 1.5rem;
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  max-width: 400px;
+  width: calc(100% - 3rem);
+  pointer-events: none;
+}
+
+.toast-message {
+  pointer-events: auto;
+  background: #FFFFFF;
+  border-radius: var(--radius-md);
+  padding: 0.85rem 1.15rem;
+  box-shadow: var(--shadow-lg);
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  border-left: 4px solid var(--primary-800);
+}
+
+.toast-message.toast-danger { border-left-color: var(--color-danger); }
+.toast-message.toast-success { border-left-color: var(--color-success); }
+.toast-message.toast-warning { border-left-color: var(--color-warning); }
+
+.toast-body {
+  font-size: 0.85rem;
+  color: var(--text-main);
+  font-weight: 600;
+}
+
+/* ==========================================================================
+   STUDENT DASHBOARD & VOTING VIEW
+   ========================================================================== */
+
+.dashboard-view-section {
+  display: none;
+  flex: 1;
+  max-width: 1280px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 2rem 1.5rem;
+}
+
+.dashboard-header-card {
+  background: #FFFFFF;
+  border: 1px solid var(--border-color);
+  border-top: 4px solid var(--primary-800);
+  border-radius: var(--radius-lg);
+  padding: 1.75rem 2rem;
+  box-shadow: var(--shadow-md);
+  margin-bottom: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 1.25rem;
+}
+
+.student-info-meta {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+}
+
+.dash-university-emblem {
+  width: 60px;
+  height: 60px;
+  object-fit: contain;
+  flex-shrink: 0;
+}
+
+.student-avatar-img {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid var(--primary-100);
+}
+
+.student-details h2 {
+  font-size: 1.35rem;
+  font-weight: 800;
+  color: var(--primary-900);
+}
+
+.student-details p {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+
+.dash-institution-label {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--accent-gold-dark);
+  text-transform: uppercase;
+  margin-top: 0.15rem;
+}
+
+.status-badge-pill {
+  padding: 0.45rem 1.15rem;
+  border-radius: var(--radius-full);
+  font-size: 0.825rem;
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.badge-eligible { background-color: var(--color-success); color: #FFFFFF; }
+.badge-voted { background-color: var(--primary-800); color: #FFFFFF; }
+.badge-ineligible { background-color: var(--color-warning); color: #FFFFFF; }
+
+/* Dashboard Banners */
+.dashboard-alert-banner {
+  border-radius: var(--radius-md);
+  padding: 1.15rem 1.5rem;
+  margin-bottom: 2rem;
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+}
+
+.banner-voted-success {
+  background-color: #F0FDF4;
+  border: 1px solid #A7F3D0;
+  color: #065F46;
+}
+
+.banner-ineligible-warning {
+  background-color: #FFFBEB;
+  border: 1px solid #FDE68A;
+  color: #92400E;
+}
+
+.banner-icon { font-size: 1.35rem; }
+
+/* Election Ballot Cards */
+.election-section-title {
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: var(--primary-900);
+  margin-bottom: 1.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.positions-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 1.75rem;
+}
+
+.position-card {
+  background: #FFFFFF;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+  padding: 1.75rem;
+}
+
+.position-header {
+  border-bottom: 1px solid var(--border-color);
+  padding-bottom: 0.85rem;
+  margin-bottom: 1.25rem;
+}
+
+.position-title {
+  font-size: 1.15rem;
+  font-weight: 800;
+  color: var(--primary-900);
+}
+
+.position-desc {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+
+.candidates-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.25rem;
+}
+
+.candidate-item-card {
+  border: 1.5px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 1.25rem;
+  background: #FFFFFF;
+  transition: var(--transition-fast);
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+  cursor: pointer;
+}
+
+.candidate-item-card:hover:not(.disabled) {
+  border-color: var(--primary-600);
+  box-shadow: var(--shadow-md);
+}
+
+.candidate-item-card.selected {
+  border-color: var(--primary-800);
+  background: var(--primary-50);
+}
+
+.candidate-item-card.disabled {
+  cursor: not-allowed;
+  opacity: 0.75;
+}
+
+.candidate-top {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+}
+
+.candidate-avatar {
+  width: 54px;
+  height: 54px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid var(--border-color);
+}
+
+.candidate-initials-avatar {
+  width: 54px;
+  height: 54px;
+  border-radius: 50%;
+  background-color: var(--primary-50);
+  color: var(--primary-800);
+  border: 2px solid var(--primary-100);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 1.1rem;
+  flex-shrink: 0;
+}
+
+.candidate-meta h4 {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--text-main);
+}
+
+.candidate-meta p {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+}
+
+.candidate-motto {
+  font-size: 0.825rem;
+  font-weight: 600;
+  color: var(--primary-800);
+  font-style: italic;
+}
+
+.candidate-manifesto {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  line-height: 1.4;
+}
+
+.radio-select-wrapper {
+  margin-top: auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 0.65rem;
+  border-top: 1px dashed var(--border-color);
+}
+
+.radio-custom-input {
+  width: 18px;
+  height: 18px;
+  accent-color: var(--primary-800);
+}
+
+.vote-submit-bar {
+  margin-top: 2rem;
+  background: #FFFFFF;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  padding: 1.35rem 1.75rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-shadow: var(--shadow-md);
+}
+
+/* Modals */
+.modal-backdrop {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(15, 23, 42, 0.5);
+  backdrop-filter: blur(4px);
+  z-index: 999;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+}
+
+.modal-content-card {
+  background: #FFFFFF;
+  border-radius: var(--radius-lg);
+  max-width: 520px;
+  width: 100%;
+  padding: 1.75rem;
+  box-shadow: var(--shadow-lg);
+  border-top: 4px solid var(--primary-800);
+}
+
+.modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+}
+
+.modal-title {
+  font-size: 1.15rem;
+  font-weight: 800;
+  color: var(--primary-900);
+}
+
+.btn-close-modal {
+  background: transparent;
+  border: none;
+  font-size: 1.25rem;
+  color: var(--text-muted);
+  cursor: pointer;
+}
+
+.modal-body {
+  margin-bottom: 1.25rem;
+  font-size: 0.875rem;
+  color: var(--text-muted);
+}
+
+.modal-footer {
+  display: flex;
+  gap: 0.75rem;
+  justify-content: flex-end;
+}
+
+.btn-secondary {
+  padding: 0.7rem 1.15rem;
+  font-family: inherit;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--text-main);
+  background: #FFFFFF;
+  border: 1.5px solid var(--border-color);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+}
+
+.btn-secondary:hover { background: var(--border-color); }
+
+/* ==========================================================================
+   FOOTER
+   ========================================================================== */
+
+.university-footer {
+  background: #FFFFFF;
+  border-top: 1px solid var(--border-color);
+  padding: 1.5rem 2rem;
+  text-align: center;
+  margin-top: auto;
+}
+
+.footer-content {
+  max-width: 1280px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.footer-institution {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--primary-900);
+}
+
+.footer-title {
+  font-size: 0.825rem;
+  font-weight: 600;
+  color: var(--text-muted);
+}
+
+.footer-links {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1.25rem;
+  margin-top: 0.35rem;
+}
+
+.footer-link {
+  font-size: 0.78rem;
+  color: var(--primary-600);
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.footer-link:hover { text-decoration: underline; }
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* ==========================================================================
+   RESPONSIVE LAYOUT BREAKPOINTS
+   ========================================================================== */
+
+@media (max-width: 768px) {
+  .university-navbar {
+    padding: 0.75rem 1rem;
+  }
+  .brand-identity {
+    gap: 0.65rem;
+  }
+  .brand-logo-img {
+    width: 42px;
+    height: 42px;
+  }
+  .brand-institution {
+    font-size: 0.72rem;
+  }
+  .brand-title {
+    font-size: 0.95rem;
+  }
+  .brand-badge {
+    font-size: 0.65rem;
+  }
+  .login-card {
+    padding: 1.75rem 1.25rem;
+  }
+  .login-college-logo {
+    width: 64px;
+    height: 64px;
+  }
+  .institution-name {
+    font-size: 0.78rem;
+  }
+  .login-title {
+    font-size: 1.15rem;
+  }
+  .dashboard-header-card {
+    padding: 1.25rem;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .vote-submit-bar {
+    flex-direction: column;
+    gap: 1rem;
+    align-items: stretch;
+  }
+}
+
+/* ==========================================================================
+   ADMIN PORTAL STYLES
+   ========================================================================== */
+
+.admin-dashboard-container {
+  display: grid;
+  grid-template-columns: 240px 1fr;
+  gap: 2rem;
+}
+
+.admin-sidebar {
+  background: #FFFFFF;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  box-shadow: var(--shadow-sm);
+  height: fit-content;
+}
+
+.admin-nav-item {
+  background: transparent;
+  border: none;
+  padding: 0.65rem 1rem;
+  text-align: left;
+  font-family: inherit;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-main);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  width: 100%;
+}
+
+.admin-nav-item:hover {
+  background: var(--primary-50);
+  color: var(--primary-800);
+}
+
+.admin-nav-item.active {
+  background: var(--primary-800);
+  color: #FFFFFF;
+}
+
+.admin-section {
+  display: flex;
+  flex-direction: column;
+  animation: fadeIn 0.25s ease-out;
+}
+
+/* Results Progress Bar */
+.results-row {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  margin-bottom: 1.25rem;
+}
+
+.results-label-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-main);
+}
+
+.results-bar-bg {
+  height: 20px;
+  background: var(--primary-50);
+  border-radius: var(--radius-full);
+  overflow: hidden;
+  border: 1px solid var(--primary-100);
+  position: relative;
+}
+
+.results-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--primary-700), var(--primary-800));
+  border-radius: var(--radius-full);
+  transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Responsive Grid Adjustments */
+@media (max-width: 900px) {
+  .admin-dashboard-container {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* OTP Verification Input Styles */
+.otp-input-styled {
+  font-size: 1.5rem;
+  letter-spacing: 0.5rem;
+  text-align: center;
+  font-weight: 800;
+  color: var(--primary-900);
+  padding: 0.75rem 1rem;
+  font-family: monospace;
+}
+
+.otp-input-styled::placeholder {
+  letter-spacing: 0.35rem;
+  color: #CBD5E1;
+  font-weight: 400;
+}
+
+/* Action Button Variations */
+.btn-sm {
+  padding: 0.35rem 0.65rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  border: 1px solid transparent;
+  transition: all 0.2s ease;
+}
+
+.btn-danger-outline {
+  background: transparent;
+  color: var(--color-danger);
+  border-color: #FECACA;
+}
+
+.btn-danger-outline:hover {
+  background: #FEF2F2;
+  border-color: var(--color-danger);
+}
+
+.btn-success-outline {
+  background: transparent;
+  color: var(--color-success);
+  border-color: #BBF7D0;
+}
+
+.btn-success-outline:hover {
+  background: #F0FDF4;
+  border-color: var(--color-success);
+}
+
+

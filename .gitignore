@@ -1,0 +1,17 @@
+# Environment Variables
+.env
+.env.*
+!.env.example
+
+# Local Data Store
+data/voting_store.json
+
+# Python Cache
+__pycache__/
+*.pyc
+
+# Backup Files
+*.bak
+
+# Node Dependencies
+node_modules/
