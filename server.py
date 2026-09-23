@@ -40,7 +40,9 @@ def send_otp_email(target_email, student_name, otp_code):
     expiry_minutes = int(os.environ.get("OTP_EXPIRY_MINUTES", "5"))
 
     if not smtp_host:
-        return False, "SMTP email service is not configured (SMTP_HOST missing)."
+        err_msg = "ConfigurationError: SMTP_HOST environment variable is missing or empty."
+        print(f"[OTP SERVICE] Email delivery failed: {err_msg}", flush=True)
+        return False, err_msg
 
     try:
         smtp_port = int(smtp_port_raw)
@@ -134,7 +136,10 @@ Kanchipuram, Tamil Nadu
 
         return True, "Email delivered successfully."
     except Exception as e:
-        return False, f"SMTP delivery error: {str(e)}"
+        err_type = type(e).__name__
+        err_msg = f"{err_type}: {str(e)}"
+        print(f"[OTP SERVICE] Email delivery failed: {err_msg}", flush=True)
+        return False, err_msg
 
 
 MIME_TYPES = {
@@ -400,14 +405,14 @@ class VotingAppHandler(SimpleHTTPRequestHandler):
             # Dispatch OTP via Real SMTP Email
             sent_ok, send_msg = send_otp_email(student_email, student_name, otp_code)
             if not sent_ok:
-                print(f"[OTP SERVICE] Email delivery failed for {reg_no}: {send_msg}")
+                print(f"[OTP SERVICE] Email delivery failed for {reg_no}: {send_msg}", flush=True)
                 self._send_json(500, {
                     "success": False,
                     "message": "Unable to send OTP email. Please try again."
                 })
                 return
 
-            print(f"[OTP SERVICE] Verification code successfully dispatched to {student_email}")
+            print(f"[OTP SERVICE] Verification code successfully dispatched to {student_email}", flush=True)
 
             self._send_json(200, {
                 "success": True,
