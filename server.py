@@ -8,6 +8,8 @@ import sys
 import json
 import re
 import urllib.parse
+import urllib.request
+import urllib.error
 import smtplib
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
@@ -25,13 +27,72 @@ ADMIN_PASS = os.environ.get("ADMIN_PASSWORD", "Admin@2026").strip()
 REG_NO_PATTERN = re.compile(r"^11[A-Z0-9]{7}$")
 
 
+def _send_resend_api_email(api_key, from_email, target_email, student_name, otp_code, expiry_minutes, html_body, text_body):
+    """
+    Sends transactional email via Resend HTTPS REST API (Port 443) to bypass SMTP network blocks on Render.
+    Never exposes API keys or credentials in output/logs.
+    """
+    url = "https://api.resend.com/emails"
+
+    # Sender formatting
+    sender = from_email if from_email else "Anveshan Digital Voting <onboarding@resend.dev>"
+    if "<" not in sender and "@" in sender:
+        sender = f"Anveshan Digital Voting <{sender}>"
+
+    payload = {
+        "from": sender,
+        "to": [target_email],
+        "subject": "Anveshan - Your Voting Verification OTP",
+        "html": html_body,
+        "text": text_body
+    }
+
+    req = urllib.request.Request(
+        url,
+        data=json.dumps(payload).encode("utf-8"),
+        headers={
+            "Authorization": f"Bearer {api_key}",
+            "Content-Type": "application/json",
+            "User-Agent": "Anveshan-Voting-System/1.0"
+        },
+        method="POST"
+    )
+
+    try:
+        with urllib.request.urlopen(req, timeout=15) as resp:
+            resp_body = resp.read().decode("utf-8")
+            data = json.loads(resp_body) if resp_body else {}
+            email_id = data.get("id", "ok")
+            return True, f"Email delivered successfully via Resend API (id: {email_id})."
+    except urllib.error.HTTPError as e:
+        error_detail = ""
+        try:
+            err_data = json.loads(e.read().decode("utf-8"))
+            error_detail = err_data.get("message") or err_data.get("name") or str(err_data)
+        except Exception:
+            error_detail = e.reason
+        err_msg = f"ResendAPIError (HTTP {e.code}): {error_detail}"
+        print(f"[OTP SERVICE] Email delivery failed: {err_msg}", flush=True)
+        return False, err_msg
+    except Exception as e:
+        err_type = type(e).__name__
+        err_msg = f"{err_type}: {str(e)}"
+        print(f"[OTP SERVICE] Email delivery failed: {err_msg}", flush=True)
+        return False, err_msg
+
+
 def send_otp_email(target_email, student_name, otp_code):
     """
-    Sends a genuine 6-digit OTP verification code to the student's registered college email
-    via SMTP using configuration provided exclusively in environment variables.
+    Sends a genuine 6-digit OTP verification code to the student's registered college email.
+    Supports:
+      1. Resend HTTPS API (RESEND_API_KEY) — recommended for cloud hosts like Render where raw SMTP is blocked.
+      2. SMTP (SMTP_HOST, SMTP_PORT, SMTP_USERNAME, SMTP_PASSWORD) — fallback for local/direct relay networks.
     Never exposes credentials or secrets in output.
     """
     load_env(override=True)
+    resend_api_key = os.environ.get("RESEND_API_KEY", "").strip()
+    resend_from = (os.environ.get("RESEND_FROM_EMAIL") or os.environ.get("SMTP_FROM_EMAIL") or "").strip()
+
     smtp_host = os.environ.get("SMTP_HOST", "").strip()
     smtp_port_raw = os.environ.get("SMTP_PORT", "587").strip()
     smtp_user = (os.environ.get("SMTP_USERNAME") or os.environ.get("SMTP_USER", "")).strip()
@@ -39,23 +100,7 @@ def send_otp_email(target_email, student_name, otp_code):
     from_email = (os.environ.get("SMTP_FROM_EMAIL") or os.environ.get("SMTP_FROM") or smtp_user or "no-reply@kanchiuniv.ac.in").strip()
     expiry_minutes = int(os.environ.get("OTP_EXPIRY_MINUTES", "5"))
 
-    if not smtp_host:
-        err_msg = "ConfigurationError: SMTP_HOST environment variable is missing or empty."
-        print(f"[OTP SERVICE] Email delivery failed: {err_msg}", flush=True)
-        return False, err_msg
-
-    try:
-        smtp_port = int(smtp_port_raw)
-    except ValueError:
-        smtp_port = 587
-
-    try:
-        msg = MIMEMultipart("alternative")
-        msg["Subject"] = Header("Anveshan - Your Voting Verification OTP", "utf-8")
-        msg["From"] = f"Anveshan Digital Voting <{from_email}>"
-        msg["To"] = target_email
-
-        text_body = f"""Dear {student_name or 'Student'},
+    text_body = f"""Dear {student_name or 'Student'},
 
 Your 6-digit verification code for Anveshan Digital Voting is:
 
@@ -71,7 +116,7 @@ Anveshan — Sri Chandrasekharendra Saraswathi Viswa Mahavidyalaya (SCSVMV)
 Kanchipuram, Tamil Nadu
 """
 
-        html_body = f"""<!DOCTYPE html>
+    html_body = f"""<!DOCTYPE html>
 <html>
 <head>
   <meta charset="utf-8">
@@ -114,6 +159,36 @@ Kanchipuram, Tamil Nadu
 </body>
 </html>
 """
+
+    # 1. Preferred Route: Resend HTTPS REST API (Port 443 - works on Render)
+    if resend_api_key:
+        return _send_resend_api_email(
+            resend_api_key,
+            resend_from,
+            target_email,
+            student_name,
+            otp_code,
+            expiry_minutes,
+            html_body,
+            text_body
+        )
+
+    # 2. Fallback Route: Direct SMTP
+    if not smtp_host:
+        err_msg = "ConfigurationError: Neither RESEND_API_KEY nor SMTP_HOST environment variable is configured."
+        print(f"[OTP SERVICE] Email delivery failed: {err_msg}", flush=True)
+        return False, err_msg
+
+    try:
+        smtp_port = int(smtp_port_raw)
+    except ValueError:
+        smtp_port = 587
+
+    try:
+        msg = MIMEMultipart("alternative")
+        msg["Subject"] = Header("Anveshan - Your Voting Verification OTP", "utf-8")
+        msg["From"] = f"Anveshan Digital Voting <{from_email}>"
+        msg["To"] = target_email
         msg.attach(MIMEText(text_body, "plain", "utf-8"))
         msg.attach(MIMEText(html_body, "html", "utf-8"))
 
@@ -402,7 +477,7 @@ class VotingAppHandler(SimpleHTTPRequestHandler):
             # Generate 6-Digit Single-Use OTP
             otp_code = db.store_otp(reg_no, expiry_minutes=5)
 
-            # Dispatch OTP via Real SMTP Email
+            # Dispatch OTP via Real SMTP/Resend HTTPS Email
             sent_ok, send_msg = send_otp_email(student_email, student_name, otp_code)
             if not sent_ok:
                 print(f"[OTP SERVICE] Email delivery failed for {reg_no}: {send_msg}", flush=True)
