@@ -137,6 +137,28 @@ Kanchipuram, Tamil Nadu
         return False, f"SMTP delivery error: {str(e)}"
 
 
+MIME_TYPES = {
+    ".html": "text/html; charset=utf-8",
+    ".htm": "text/html; charset=utf-8",
+    ".css": "text/css; charset=utf-8",
+    ".js": "application/javascript; charset=utf-8",
+    ".mjs": "application/javascript; charset=utf-8",
+    ".json": "application/json; charset=utf-8",
+    ".png": "image/png",
+    ".jpg": "image/jpeg",
+    ".jpeg": "image/jpeg",
+    ".gif": "image/gif",
+    ".svg": "image/svg+xml",
+    ".ico": "image/x-icon",
+    ".webp": "image/webp",
+    ".woff": "font/woff",
+    ".woff2": "font/woff2",
+    ".ttf": "font/ttf",
+    ".eot": "application/vnd.ms-fontobject",
+    ".txt": "text/plain; charset=utf-8",
+}
+
+
 class VotingAppHandler(SimpleHTTPRequestHandler):
     """
     HTTP Request Handler serving REST APIs under /api/* and static assets.
@@ -144,8 +166,8 @@ class VotingAppHandler(SimpleHTTPRequestHandler):
 
     def __init__(self, *args, **kwargs):
         # Set workspace root as static directory
-        workspace_dir = os.path.dirname(os.path.abspath(__file__))
-        super().__init__(*args, directory=workspace_dir, **kwargs)
+        self.workspace_dir = os.path.dirname(os.path.abspath(__file__))
+        super().__init__(*args, directory=self.workspace_dir, **kwargs)
 
     def _send_json(self, status_code, data):
         response_bytes = json.dumps(data, ensure_ascii=False).encode("utf-8")
@@ -157,6 +179,69 @@ class VotingAppHandler(SimpleHTTPRequestHandler):
         self.send_header("Access-Control-Allow-Headers", "Content-Type, Authorization")
         self.end_headers()
         self.wfile.write(response_bytes)
+
+    def _serve_file(self, file_path):
+        try:
+            with open(file_path, "rb") as f:
+                content = f.read()
+            _, ext = os.path.splitext(file_path)
+            content_type = MIME_TYPES.get(ext.lower(), "application/octet-stream")
+            self.send_response(200)
+            self.send_header("Content-Type", content_type)
+            self.send_header("Content-Length", str(len(content)))
+            self.send_header("Access-Control-Allow-Origin", "*")
+            self.send_header("Cache-Control", "public, max-age=3600" if ext.lower() != ".html" else "no-cache")
+            self.end_headers()
+            self.wfile.write(content)
+            return True
+        except Exception as e:
+            print(f"[STATIC] Error serving {file_path}: {e}")
+            return False
+
+    def _resolve_and_serve_static(self, raw_path):
+        clean_path = raw_path.lstrip("/").split("?")[0].split("#")[0]
+        if not clean_path or clean_path in ("index.html", "admin.html", "admin"):
+            clean_path = "index.html"
+
+        candidates = [clean_path]
+
+        # Handle subfolder requested (e.g. css/styles.css, js/app.js, assets/scsvmv_logo.png)
+        if "/" in clean_path:
+            filename = os.path.basename(clean_path)
+            candidates.append(filename)
+        else:
+            # Handle flat filename requested (e.g. styles.css, app.js, scsvmv_logo.png)
+            if clean_path.endswith(".css"):
+                candidates.append(os.path.join("css", clean_path))
+            elif clean_path.endswith(".js"):
+                candidates.append(os.path.join("js", clean_path))
+            elif any(clean_path.endswith(ext) for ext in [".png", ".jpg", ".jpeg", ".svg", ".ico"]):
+                candidates.append(os.path.join("assets", clean_path))
+
+        # Logo asset fallbacks
+        if "logo" in clean_path.lower():
+            candidates.extend([
+                os.path.join("assets", "scsvmv_logo.png"),
+                "scsvmv_logo.png",
+                os.path.join("assets", "scsvmv_logo.jpg"),
+                "scsvmv_logo.jpg",
+                os.path.join("assets", "scsvmv_logo_original.jpg"),
+                "scsvmv_logo_original.jpg"
+            ])
+
+        for cand in candidates:
+            full_path = os.path.normpath(os.path.join(self.workspace_dir, cand))
+            if full_path.startswith(self.workspace_dir) and os.path.isfile(full_path):
+                if self._serve_file(full_path):
+                    return True
+
+        # Fallback to index.html for SPA frontend routing
+        index_path = os.path.join(self.workspace_dir, "index.html")
+        if os.path.isfile(index_path):
+            return self._serve_file(index_path)
+
+        self._send_json(404, {"success": False, "message": f"Resource not found: {raw_path}"})
+        return False
 
     def _parse_json_body(self):
         try:
@@ -188,11 +273,8 @@ class VotingAppHandler(SimpleHTTPRequestHandler):
             self._handle_api_get(path, query_params)
             return
 
-        # Serve SPA Index for root
-        if path == "/":
-            self.path = "/index.html"
-
-        super().do_GET()
+        # Serve Static Assets / SPA Index
+        self._resolve_and_serve_static(path)
 
     def _handle_api_get(self, path, query_params):
         # Student: Get Me / Profile
