@@ -413,12 +413,28 @@
             </p>
           </div>
 
-          <!-- Email OTP Delivery Notification Notice -->
-          <div style="background: #F0FDF4; border: 1px solid #BBF7D0; border-radius: 8px; padding: 0.75rem 1rem; margin-bottom: 1.15rem; text-align: left; display: flex; align-items: center; gap: 0.6rem;">
+          <!-- Email OTP Delivery Notification Notice (Shown when real email is dispatched) -->
+          <div id="otpLiveNotice" style="background: #F0FDF4; border: 1px solid #BBF7D0; border-radius: 8px; padding: 0.75rem 1rem; margin-bottom: 1.15rem; text-align: left; display: flex; align-items: center; gap: 0.6rem;">
             <span style="font-size: 1.1rem; color: #16A34A; flex-shrink: 0;">✉️</span>
             <span style="font-size: 0.8rem; color: #166534; line-height: 1.35;">
               A 6-digit verification code has been sent to your registered college email.
             </span>
+          </div>
+
+          <!-- Demo / Testing Fallback Notice (Shown only if unverified domain restriction occurs) -->
+          <div id="otpDemoNotice" style="display: none; background: #FFFBEB; border: 1px solid #FCD34D; border-radius: 8px; padding: 0.85rem 1rem; margin-bottom: 1.15rem; text-align: left;">
+            <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.4rem;">
+              <span style="font-size: 0.75rem; font-weight: 800; background: #D97706; color: #FFFFFF; padding: 0.15rem 0.45rem; border-radius: 4px; text-transform: uppercase; letter-spacing: 0.5px;">
+                Demo Testing Mode
+              </span>
+              <span style="font-size: 0.75rem; color: #92400E; font-weight: 600;">(Unverified Domain Fallback)</span>
+            </div>
+            <p style="font-size: 0.78rem; color: #78350F; margin: 0 0 0.5rem 0; line-height: 1.35;">
+              Real email delivery to <strong>@kanchiuniv.ac.in</strong> is active when a custom domain is verified on Resend. For evaluation, use this active session verification code:
+            </p>
+            <div style="background: #FEF3C7; border: 1px dashed #D97706; border-radius: 6px; padding: 0.4rem; text-align: center;">
+              <span id="demoOtpCodeDisplay" style="font-family: Consolas, monospace; font-size: 1.4rem; font-weight: 800; letter-spacing: 4px; color: #B45309;">------</span>
+            </div>
           </div>
 
           <form id="otpForm" novalidate onsubmit="handleOtpSubmission(event)">
