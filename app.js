@@ -103,10 +103,23 @@ function initLoginModule() {
       document.getElementById('otpCodeInput').value = '';
       document.getElementById('otpErr').textContent = '';
 
+      const liveNotice = document.getElementById('otpLiveNotice');
+      const demoNotice = document.getElementById('otpDemoNotice');
+      const demoCodeDisplay = document.getElementById('demoOtpCodeDisplay');
+
+      if (res.demoMode && res.demoOtp) {
+        if (liveNotice) liveNotice.style.display = 'none';
+        if (demoNotice) demoNotice.style.display = 'block';
+        if (demoCodeDisplay) demoCodeDisplay.textContent = res.demoOtp;
+        showToast('Demo Testing Mode active for session.', 'warning');
+      } else {
+        if (liveNotice) liveNotice.style.display = 'flex';
+        if (demoNotice) demoNotice.style.display = 'none';
+        showToast(res.message || 'A 6-digit verification code has been sent to your registered college email.', 'success');
+      }
+
       openModal('otpModal');
       startOtpTimer(300); // 5 minutes
-
-      showToast(res.message || 'A 6-digit verification code has been sent to your registered college email.', 'success');
       setTimeout(() => document.getElementById('otpCodeInput').focus(), 150);
     } catch (err) {
       btnText.style.display = 'inline-block';
@@ -149,7 +162,20 @@ async function resendOtp() {
   try {
     const res = await API.student.requestOtp(pendingRegNo);
     startOtpTimer(300);
-    showToast(res.message || 'A 6-digit verification code has been sent to your registered college email.', 'success');
+    const liveNotice = document.getElementById('otpLiveNotice');
+    const demoNotice = document.getElementById('otpDemoNotice');
+    const demoCodeDisplay = document.getElementById('demoOtpCodeDisplay');
+
+    if (res.demoMode && res.demoOtp) {
+      if (liveNotice) liveNotice.style.display = 'none';
+      if (demoNotice) demoNotice.style.display = 'block';
+      if (demoCodeDisplay) demoCodeDisplay.textContent = res.demoOtp;
+      showToast('Demo Mode: New session verification code generated.', 'warning');
+    } else {
+      if (liveNotice) liveNotice.style.display = 'flex';
+      if (demoNotice) demoNotice.style.display = 'none';
+      showToast(res.message || 'A 6-digit verification code has been sent to your registered college email.', 'success');
+    }
   } catch (err) {
     showToast(err.message || 'Unable to send OTP email. Please try again.', 'danger');
   }
